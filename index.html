@@ -1,0 +1,1421 @@
+<html>
+
+<head>
+  <title>M i n e s w e e p e r - by Henk Kruger</title>
+  <style type="text/css">
+  
+	body {
+		width:900px;
+		margin-left: 25%; margin-right: 25%;
+	}
+	
+	p {
+		text-align: justify !important;
+	}
+	
+	#grid { zoom: 125% }
+	.button {
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: #808080;
+	  border: none;
+	  color: #FFFFFF;
+	  text-align: center;
+	  font-size: 16px;
+	  padding: 12px;
+	  width: 150px;
+	  transition: all 0.5s;
+	  cursor: pointer;
+	  margin: 2px;
+	  font-family: Tahoma;
+	}
+
+	.button span {
+	  cursor: pointer;
+	  display: inline-block;
+	  position: relative;
+	  transition: 0.5s;
+	}
+
+	.button span:after {
+	  content: '\00bb';
+	  position: absolute;
+	  opacity: 0;
+	  top: 0;
+	  right: -12px;
+	  transition: 0.5s;
+	}
+
+	.button:hover span {
+	  padding-right: 25px;
+	}
+
+	.button:hover span:after {
+	  opacity: 1;
+	  right: 0;
+	}	
+	
+	.menu_item {font-family: Tahoma; font-size:12pt; color: white;}
+	.menu_item:hover {color: #B5DB29; text-decoration: underline; cursor: pointer;}
+	
+	.header {font-family: Verdana; font-size: 18pt; color: #B5DB29; font-weight: bold}
+  
+	.SquareNormal {
+		background-image: url("SquareNormal.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.BombNormal {
+		background-image: url("BombNormal.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.SquareDown {
+		background-image: url("SquareDown.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+ 
+	.Square1 {
+		background-image: url("Square1.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+  
+  	.Square2 {
+		background-image: url("Square2.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.Square3 {
+		background-image: url("Square3.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.Square4 {
+		background-image: url("Square4.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.Square5 {
+		background-image: url("Square5.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.Square6 {
+		background-image: url("Square6.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.Square7 {
+		background-image: url("Square7.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.Square8 {
+		background-image: url("Square8.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.WrongFlag {
+		background-image: url("WrongFlag.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.SquareFlag {
+		background-image: url("SquareFlag.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+
+	.BombRed {
+		background-image: url("BombRed.gif");
+		background-repeat: no-repeat;
+		width: 16px; height: 16px;
+	}
+	
+	.ProfilePic {
+		background-image: url("ProfilePic.jpg");
+		background-repeat: no-repeat;
+		width: 150x; height: 162px;
+	}
+	
+	.Shake {
+	  animation: shake 0.5s;
+	  animation-iteration-count: 2;
+	}
+
+	@keyframes shake {
+	  0% { transform: translate(1px, 1px) rotate(0deg); }
+	  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+	  20% { transform: translate(-3px, 0px) rotate(1deg); }
+	  30% { transform: translate(3px, 2px) rotate(0deg); }
+	  40% { transform: translate(1px, -1px) rotate(1deg); }
+	  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+	  60% { transform: translate(-3px, 1px) rotate(0deg); }
+	  70% { transform: translate(3px, 1px) rotate(-1deg); }
+	  80% { transform: translate(-1px, -1px) rotate(1deg); }
+	  90% { transform: translate(1px, 2px) rotate(0deg); }
+	  100% { transform: translate(1px, -2px) rotate(-1deg); }
+	}
+
+/*DO THE FLIP*/
+.flip-container {
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    -ms-perspective: 1000;
+    perspective: 1000;
+    -ms-transform: perspective(1000px);
+    -moz-transform: perspective(1000px);
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d
+}
+
+.back,.flip-container.hover .back {
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    transform: rotateY(0deg)
+}
+
+.front,.flip-container.hover .front {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg)
+}
+
+.flipper {
+    -webkit-transition: 0.6s;
+    -webkit-transform-style: preserve-3d;
+    -ms-transition: 0.6s;
+    -moz-transition: 0.6s;
+    -moz-transform: perspective(1000px);
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative
+}
+
+.front,.back {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: 0.6s;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform: rotateY(0deg);
+    -moz-transition: 0.6s;
+    -moz-transform-style: preserve-3d;
+    -moz-transform: rotateY(0deg);
+    -o-transition: 0.6s;
+    -o-transform-style: preserve-3d;
+    -o-transform: rotateY(0deg);
+    -ms-transition: 0.6s;
+    -ms-transform-style: preserve-3d;
+    -ms-transform: rotateY(0deg);
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    position: absolute;
+    top: 0 !important;
+    left: 0
+}
+
+.front {
+    -webkit-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    z-index: 2
+}
+
+.back {
+    -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    -o-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+    transform: rotateY(-180deg)
+}
+
+.front .name {
+    -webkit-transform: rotate(-20deg);
+    -moz-transform: rotate(-20deg);
+    -ms-transform: rotate(-20deg);
+    transform: rotate(-20deg)
+}
+
+	</style>
+
+<script language="JavaScript">
+
+	var Digits = new Array();
+	var BombLocations = new Array();
+	var RealCounter = 0;
+	var TextCounter = "";
+	var score = 10;
+	var RealTimer;
+	var CurrentLevel = 1;
+	var Bombs = 10;
+	var BombsFlaged = 0;
+	var TotalExposed = 0;
+	var ShiftDown = "No";
+	var GridXTotal = 8;
+	var GridYTotal = 8;
+	var GameEnded = true;
+	var FirstClickIsBomb = true;
+	var grid;
+	var Main;
+
+	function newImage(location) {
+		if (document.images) {
+			rslt = new Image();
+			rslt.src = location;
+			return rslt;
+		}
+	}
+
+	function Bomb(RandomX, RandomY) {
+		this.x = RandomX;
+		this.y = RandomY;
+		return this
+	}
+
+function DefineSquare(x, y) {
+
+				BombTouchCount = 0;
+				
+				if (grid.rows[y].cells[x].getAttribute("celltype")!="BOMB") {
+
+//TOPLEFT		
+				if (y==0 && x==0) {
+					grid.rows[y].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+//TOPRIGHT
+				if (y==0 && x==(grid.rows[y].cells.length-1)) {
+					grid.rows[y].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+
+//BOTTOMRIGHT
+				if (y==(grid.rows.length-1) && x==(grid.rows[y].cells.length-1)) {
+					grid.rows[y].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+//BOTTOMLEFT
+				if (y==grid.rows.length-1 && x==0) {
+					grid.rows[y].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+
+
+ //LEFT
+ 				if ((y>0 && y<grid.rows.length-1) && x==0) {
+					grid.rows[y-1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";				
+				}
+//RIGHT
+				if ((y>0 && y<grid.rows.length-1) && x==(grid.rows[y].cells.length-1)) {
+					grid.rows[y-1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";		
+				}
+
+//TOP
+ 				if ((x>0 && x<grid.rows[y].cells.length-1) && y==0) {
+					grid.rows[y].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+//BOTTOM
+				if ((x>0 && x<grid.rows[y].cells.length-1) && y==(grid.rows.length-1)) {
+					grid.rows[y].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+//MIDDLE
+				if ((x>0 && x<grid.rows[y].cells.length-1) && (y>0 && y<grid.rows.length-1)) {
+					grid.rows[y-1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y-1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[y].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x-1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[x].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+					grid.rows[parseInt(y)+1].cells[parseInt(x)+1].getAttribute("celltype")=="BOMB"? BombTouchCount++ : "";
+				}
+
+				grid.rows[y].cells[x].setAttribute("celltype", "" + BombTouchCount );
+				}
+
+}
+
+	function DefineBombs() {
+		
+		for (BombCount=0; BombCount<Bombs; BombCount++) {
+			RandomY = Math.round((grid.rows.length-1)*Math.random());
+			RandomX = Math.round((grid.rows[0].cells.length-1)*Math.random());
+			
+			if (!grid.rows[RandomY].cells[RandomX].getAttribute("celltype") || grid.rows[RandomY].cells[RandomX].getAttribute("celltype") == "BLANK") {
+					grid.rows[RandomY].cells[RandomX].setAttribute("celltype", "BOMB");
+                    BombLocations[BombCount] = new Bomb(RandomX, RandomY);
+					}
+				else
+					BombCount--;
+		}
+
+		//DEFINE Numbers For BOMBS
+		for (y=0; y<grid.rows.length; y++) {
+			for (x=0; x<grid.rows[y].cells.length; x++) {
+					DefineSquare(x, y);
+			}
+		}
+	}
+
+	function RevealSquare(Square) {
+		switch (Square.getAttribute("celltype")) {
+			case "BOMB" : Square.className = "BombNormal";
+						  break;
+			case "0"	: Square.className = "SquareDown";
+						  break;
+			case "1"	: Square.className = "Square1";
+						  break;
+			case "2"	: Square.className = "Square2";
+						  break;
+			case "3"	: Square.className = "Square3";
+						  break;
+			case "4"	: Square.className = "Square4";
+						  break;
+			case "5"	: Square.className = "Square5";
+						  break;
+			case "6"	: Square.className = "Square6";
+						  break;
+			case "7"	: Square.className = "Square7";
+						  break;
+			case "8"	: Square.className = "Square8";
+						  break;
+    	}
+		Square.getAttribute("cellstatus") != "EXPOSED"? TotalExposed++ : "";
+		Square.setAttribute("cellstatus", "EXPOSED" );
+	}
+
+function RevealAll() {
+	for (y=0; y<grid.rows.length; y++) {
+		for (x=0; x<grid.rows[y].cells.length; x++) {
+			if (grid.rows[y].cells[x].getAttribute("cellstatus") == "FLAGED") {
+				if (grid.rows[y].cells[x].getAttribute("celltype") != "BOMB") {
+					grid.rows[y].cells[x].className = "WrongFlag";
+					grid.rows[y].cells[x].setAttribute("cellstatus", "EXPOSED");
+					}
+			}
+			else {
+			RevealSquare(grid.rows[y].cells[x]);
+			}
+		}
+	}
+	document.querySelector("#Face").setAttribute("src", FaceSad.src );
+	EndGame();
+	Main.classList.add("Shake");
+}
+
+function GameFinished() {
+	document.querySelector("#Face").setAttribute("src", FaceCool.src );
+	clearInterval(RealTimer);
+	RealTimer = null;
+
+	if (BombsFlaged != Bombs) {
+		for (i=0; i<BombLocations.length; i++) {
+			CorrectSquare = grid.rows[BombLocations[i].y].cells[BombLocations[i].x];
+			if (CorrectSquare.getAttribute("cellstatus") != "FLAGED") {
+				CorrectSquare.setAttribute("cellstatus", "FLAGED");
+				CorrectSquare.className = "SquareFlag";
+				BombsFlaged++;
+				UpdateBombsScore();
+			}
+		}
+	}
+
+	RealCounter = 0;
+	BombsFlaged = 0;
+	TotalExposed = 0;
+	BombsFlaged = 0;
+	document.querySelector("#statusbar").innerHTML = "Well Done!";
+	ShiftDown == "Yes"? ShiftDown = "No" : "";
+	GameEnded = true;
+	
+}
+
+	function MakeGrid(y, x) {
+		
+		window.status = "Loading . . .";
+		GridXTotal = x;
+		GridYTotal = y;
+		HTMLStr = "";
+		HTMLStr+= "<table id ='grid' cellpadding='0' cellspacing='0' oncontextmenu='return false;' style='margin: 0 auto; text-align:center'>";
+		for(i=0;i<x;i++){
+   			HTMLStr+='<TR>';
+   			for(j=0;j<y;j++)
+				HTMLStr+='<TD class="SquareNormal" onDblClick="ExposeImmediate(' + j + ', '+ i +'); return false" onmousedown="GridClick(this, event); return false;" cellstatus="COVERED" celltype="BLANK" X=' + j + ' Y=' + i + '></TD>';
+   			HTMLStr+='</TR>';
+   		}
+		HTMLStr+="</table>";
+		document.querySelector("#gameboard").innerHTML = HTMLStr;
+		document.querySelector("#UserScore").innerHTML = ConvertTextNumber(""+ Bombs);
+		document.querySelector("#timer").innerHTML = ConvertTextNumber("0");
+		document.querySelector("#Face").src=FaceSmile.src;
+
+		grid = document.querySelector("#grid");
+		
+		DefineBombs();
+		
+		document.querySelector("#statusbar").innerHTML = "m i n e s w e e p e r";
+		window.status = "";
+		grid = document.querySelector("#grid");
+   	}
+
+
+	function ConvertTextNumber(TextNumber) {
+		timerHTML="";
+		if (TextNumber.length==1) {
+			parseInt(TextNumber)<0? TextNumber = "-0" + Math.abs(parseInt(TextNumber)) : TextNumber = "00" + TextNumber;
+			}
+			else if (TextNumber.length==2) {
+				parseInt(TextNumber)<0? TextNumber = "-0" + Math.abs(parseInt(TextNumber)) : TextNumber = "0" + TextNumber
+				}
+		
+		for (x=0; x<3; x++) {
+			var number = TextNumber.substring(x, x+1);
+			number == "-"? DigitSrc = eval("Digits[10].src") : DigitSrc = eval("Digits[" + number + "].src");			
+			timerHTML+="<img src='" + DigitSrc +"'>";
+			
+		}
+		return timerHTML;
+	}
+
+	function Timer() {
+		
+		RealCounter++;
+		TextCounter = "" + RealCounter;
+		
+		document.querySelector("#timer").innerHTML=ConvertTextNumber(TextCounter);
+	}
+
+	function UpdateBombsScore() {
+		BombsTextScore = "" + (Bombs-BombsFlaged);
+		document.querySelector("#UserScore").innerHTML=ConvertTextNumber(BombsTextScore);
+	}
+
+function ValidateCustomFields() {
+	
+	if (CustomBombs.value>((CustomWidth.value-1) * (CustomHeight.value-1))) CustomBombs.value = ((CustomWidth.value-1)*(CustomHeight.value-1));
+	if (CustomBombs.value<10) CustomBombs.value = 10;
+
+	Bombs = CustomBombs.value;
+	GridXTotal = CustomWidth.value;
+	CurrentLevel = 5;
+	GridYTotal = CustomHeight.value;
+	RealCounter = 0;
+	RestartLevel(5);
+
+}
+
+function RestartLevel(LevelNumber) {
+	
+	clearInterval(RealTimer);
+	RealTimer = null;
+	RealCounter = 0;
+	BombsFlaged = 0;
+	TotalExposed = 0;
+	BombsFlaged = 0;
+	ShiftDown == "Yes"? ShiftDown = "No" : "";
+	!FirstClickIsBomb? FirstClickIsBomb = true : "";
+	GameEnded = false;
+	
+	DrawMineField();
+	document.querySelector("#Face").src = FaceSmile.src;
+	Main.classList.remove("Shake");
+
+	CurrentLevel = LevelNumber;
+
+	switch (LevelNumber){
+
+		case 1 : clearInterval(RealTimer);
+				 Bombs = 10;
+				 MakeGrid(8, 8);
+				 break;
+		case 2 : clearInterval(RealTimer);
+				 Bombs = 40;
+				 MakeGrid(16, 16);
+				 break;
+		case 3 : clearInterval(RealTimer);
+				 Bombs = 99;
+				 MakeGrid(30, 16);
+				 break;
+		case 4 : if(!GameEnded) EndGame();
+				 CustomWidth.focus();
+				 break;
+		case 5 : MakeGrid(GridYTotal, GridXTotal);
+				 break;
+	}
+}
+
+function preloadImages() {
+	if (document.images) {
+	//LOADING DIGITS
+		for (allDigits=0; allDigits<10; allDigits++) {
+			statement = "Digits[" + allDigits + "] = newImage('Digit" + allDigits + ".gif')";	
+			eval(statement);
+		}
+		Digits[10] = newImage("Minus.gif");
+
+	//LOADING FACES
+		FaceCool = newImage("FaceCool.gif");
+		FaceSad = newImage("FaceSad.gif");
+		FaceSmile = newImage("FaceSmile.gif");
+		FaceWorried = newImage("FaceWorried.gif");
+	}
+}
+
+function Begin() {
+	RealTimer = setInterval("Timer()", 1000)	;
+}
+
+function CheckKeys() {
+	if (event.keyCode==16 && ShiftDown == "No") {
+		ShiftDown = "Yes";
+		!GameEnded? Face.src = FaceWorried.src : "";
+        !GameEnded? document.querySelector("#statusbar").innerHTML = "Flag On" : "";
+	}
+}
+
+function LeaveKeys() {
+	if (ShiftDown == "Yes") {
+		ShiftDown = "No";
+		!GameEnded? Face.src = FaceSmile.src : "";
+		!GameEnded? document.querySelector("#statusbar").innerHTML = "m i n e s w e e p e r" : "";
+	}	
+}
+
+	function EndGame() {
+		clearInterval(RealTimer);
+		RealTimer = null;
+		RealCounter = 0;
+		BombsFlaged = 0;
+		TotalExposed = 0;
+		BombsFlaged = 0;
+		document.querySelector("#statusbar").innerHTML = "Better Luck Next Time";
+		GameEnded = true;
+	}
+
+	function ExposeImmediate(x, y) {
+		function CheckAllFlags(Number) {
+			var FlagCounter = 0;
+
+//-------------------- C H E C K  A L L  F L A G S  H E R E --------------------
+
+//TOPLEFT		
+				if (y==0 && x==0) {
+					grid.rows[y].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+//TOPRIGHT
+				if (y==0 && x==(grid.rows[y].cells.length-1)) {
+					grid.rows[y].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+
+//BOTTOMRIGHT
+				if (y==(grid.rows.length-1) && x==(grid.rows[y].cells.length-1)) {
+					grid.rows[y].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+//BOTTOMLEFT
+				if (y==grid.rows.length-1 && x==0) {
+					grid.rows[y].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+
+
+ //LEFT
+ 				if ((y>0 && y<grid.rows.length-1) && x==0) {
+					grid.rows[y-1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+//RIGHT
+				if ((y>0 && y<grid.rows.length-1) && x==(grid.rows[y].cells.length-1)) {
+					grid.rows[y-1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+
+//TOP
+ 				if ((x>0 && x<grid.rows[y].cells.length-1) && y==0) {
+					grid.rows[y].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+//BOTTOM
+				if ((x>0 && x<grid.rows[y].cells.length-1) && y==(grid.rows.length-1)) {
+					grid.rows[y].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+//MIDDLE
+				if ((x>0 && x<grid.rows[y].cells.length-1) && (y>0 && y<grid.rows.length-1)) {
+					grid.rows[y-1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y-1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x-1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+					grid.rows[y+1].cells[x+1].getAttribute("cellstatus")=="FLAGED"? FlagCounter++ : "";
+				}
+
+
+//------------------------------------------------------------------------------
+		if (FlagCounter==Number)
+				return true
+					else return false
+			
+		}
+
+	function HandleSquare(SquareX, SquareY) {
+		Square = grid.rows[SquareY].cells[SquareX];
+
+		if (Square.getAttribute("celltype") == "BOMB" && Square.getAttribute("cellstatus") !="FLAGED") {
+			
+				Square.className = "BombRed";
+				Square.setAttribute("cellstatus", "EXPOSED");
+				TotalExposed++;
+				return false
+			
+		}
+
+		else if (Square.getAttribute("celltype") != "BOMB" && Square.getAttribute("cellstatus") == "FLAGED") {
+			
+				Square.className = "WrongFlag";
+				Square.setAttribute("cellstatus", "EXPOSED");
+				TotalExposed++;
+				return false
+			
+		}
+
+		else {
+			
+			if (Square.getAttribute("celltype") != "BOMB") {
+						RevealSquare(Square);
+						Square.getAttribute("celltype")=="0" && Square.getAttribute("cellstatus") != "FLAGED"? BlankClicked(Square) : "";
+			}
+
+			return true
+
+		}
+
+	}
+        		
+		CurrentPosition = grid.rows[y].cells[x];
+			if (CurrentPosition.getAttribute("celltype")!="BOMB" && CurrentPosition.getAttribute("cellstatus")!="FLAGED"&& CurrentPosition.getAttribute("cellstatus")!="COVERED") {
+
+				if (CheckAllFlags(CurrentPosition.getAttribute("celltype"))) {
+				
+//-------------- E X P O S E  A L L  I M M E D I A T E  S Q U A R E S  H E R E ----
+
+var Safe = true;
+
+//TOPLEFT		
+				if (y==0 && x==0) {
+
+					!HandleSquare(x+1, y)? Safe = false : "";
+					!HandleSquare(x, y+1)? Safe = false : "";
+					!HandleSquare(x+1, y+1)? Safe = false : "";
+
+				}
+//TOPRIGHT
+				if (y==0 && x==(grid.rows[y].cells.length-1)) {
+					!HandleSquare(x-1, y)? Safe = false : "";
+					!HandleSquare(x, y+1)? Safe = false : "";
+					!HandleSquare(x-1, y+1)? Safe = false : "";
+				}
+
+//BOTTOMRIGHT
+				if (y==(grid.rows.length-1) && x==(grid.rows[y].cells.length-1)) {
+					!HandleSquare(x-1, y)? Safe = false : "";
+					!HandleSquare(x, y-1)? Safe = false : "";
+					!HandleSquare(x-1, y-1)? Safe = false : "";
+				}
+//BOTTOMLEFT
+				if (y==grid.rows.length-1 && x==0) {
+					!HandleSquare(x+1, y)? Safe = false : "";
+					!HandleSquare(x, y-1)? Safe = false : "";
+					!HandleSquare(x+1, y-1)? Safe = false: "";
+				}
+
+
+ //LEFT
+ 				if ((y>0 && y<grid.rows.length-1) && x==0) {
+					!HandleSquare(x, y-1)? Safe = false : "";
+					!HandleSquare(x+1, y-1)? Safe = false : "";
+					!HandleSquare(x+1, y)? Safe = false : "";
+					!HandleSquare(x, y+1)? Safe = false : "";
+					!HandleSquare(x+1, y+1)? Safe = false : "";
+				}
+//RIGHT
+				if ((y>0 && y<grid.rows.length-1) && x==(grid.rows[y].cells.length-1)) {
+					!HandleSquare(x, y-1)? Safe = false : "";
+					!HandleSquare(x-1, y-1)? Safe = false : "";
+					!HandleSquare(x-1, y)? Safe = false : "";
+					!HandleSquare(x, y+1)? Safe = false : "";
+					!HandleSquare(x-1, y+1)? Safe = false : "";
+				}
+
+//TOP
+ 				if ((x>0 && x<grid.rows[y].cells.length-1) && y==0) {
+					!HandleSquare(x+1, y)? Safe = false : "";
+					!HandleSquare(x-1, y)? Safe = false : "";
+					!HandleSquare(x+1, y+1)? Safe = false : "";
+					!HandleSquare(x, y+1)? Safe = false : "";
+					!HandleSquare(x-1, y+1)? Safe = false : "";
+				}
+//BOTTOM
+				if ((x>0 && x<grid.rows[y].cells.length-1) && y==(grid.rows.length-1)) {
+					!HandleSquare(x+1, y)? Safe = false : "";
+					!HandleSquare(x-1, y)? Safe = false : "";
+					!HandleSquare(x-1, y-1)? Safe = false : "";
+					!HandleSquare(x, y-1)? Safe = false : "";
+					!HandleSquare(x+1, y-1)? Safe = false : "";
+				}
+//MIDDLE
+				if ((x>0 && x<grid.rows[y].cells.length-1) && (y>0 && y<grid.rows.length-1)) {
+					!HandleSquare(x-1, y-1)? Safe = false : "";
+					!HandleSquare(x, y-1)? Safe = false : "";
+					!HandleSquare(x+1, y-1)? Safe = false : "";
+					!HandleSquare(x-1, y)? Safe = false : "";
+					!HandleSquare(x, y)? Safe = false : "";
+					!HandleSquare(x+1, y)? Safe = false : "";
+					!HandleSquare(x-1, y+1)? Safe = false : "";
+					!HandleSquare(x, y+1)? Safe = false : "";
+					!HandleSquare(x+1, y+1)? Safe = false : "";
+				}
+			
+			if (!Safe) {
+				RevealBombsOnly();
+				EndGame();
+				Main.classList.add("Shake");
+			}
+				
+				}
+				else {
+				document.querySelector("#statusbar").innerHTML = "Set Correct Flags";
+				}
+
+		}
+			//(GridXTotal * GridYTotal - TotalExposed - BombsFlaged == 0) && (BombsFlaged==Bombs)? GameFinished() : ""		
+			((GridXTotal * GridYTotal - TotalExposed - BombsFlaged == 0) && (BombsFlaged==Bombs)) || (GridXTotal * GridYTotal - TotalExposed == Bombs)? GameFinished() : "";
+	}
+
+function RevealBombsOnly() {
+	 	for (x=0; x<Bombs; x++)
+			if (grid.rows[BombLocations[x].y].cells[BombLocations[x].x].getAttribute("cellstatus") !="EXPOSED" && grid.rows[BombLocations[x].y].cells[BombLocations[x].x].getAttribute("cellstatus") !="FLAGED")
+				grid.rows[BombLocations[x].y].cells[BombLocations[x].x].className = "BombNormal";
+			Face.src = FaceSad.src;
+}
+
+function BlankClicked(Square) {
+		
+//-------------- E X P O S E  A L L  I M M E D I A T E  S Q U A R E S  FOR  B L A N K  H E R E ----
+
+var NextSquare;
+var Y = Square.getAttribute("Y");
+var X = Square.getAttribute("X");
+
+//TOPLEFT		
+				if (Y==0 && X==0) {
+					
+					NextSquare = grid.rows[Y].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+                    					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+                                        					
+				}
+//TOPRIGHT
+				if (Y==0 && X==(grid.rows[Y].cells.length-1)) {
+
+					NextSquare = grid.rows[Y].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+				}
+
+//BOTTOMRIGHT
+				if (Y==(grid.rows.length-1) && X==(grid.rows[Y].cells.length-1)) {
+
+					NextSquare = grid.rows[Y].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+				}
+//BOTTOMLEFT
+				if (Y==grid.rows.length-1 && X==0) {
+
+					NextSquare = grid.rows[Y].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+				}
+
+
+ //LEFT
+ 				if ((Y>0 && Y<grid.rows.length-1) && X==0) {
+					NextSquare = grid.rows[Y-1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+				}
+//RIGHT
+				if ((Y>0 && Y<grid.rows.length-1) && X==(grid.rows[Y].cells.length-1)) {
+
+					NextSquare = grid.rows[Y-1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+				}
+
+//TOP
+ 				if ((X>0 && X<grid.rows[Y].cells.length-1) && Y==0) {
+					
+					NextSquare = grid.rows[Y].cells[parseInt(X)+1];					
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[parseInt(Y)+1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+				}
+//BOTTOM
+				if ((X>0 && X<grid.rows[Y].cells.length-1) && Y==(grid.rows.length-1)) {
+					NextSquare = grid.rows[Y].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[Y-1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+				}
+//MIDDLE
+				if ((X>0 && X<grid.rows[Y].cells.length-1) && (Y>0 && Y<grid.rows.length-1)) {
+
+					NextSquare = grid.rows[Y-1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+
+					NextSquare = grid.rows[Y-1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[Y-1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[Y].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[Y].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[Y].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X-1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[X];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+					
+					NextSquare = grid.rows[parseInt(Y)+1].cells[parseInt(X)+1];
+					if (NextSquare.getAttribute("cellstatus") != "EXPOSED" && NextSquare.getAttribute("cellstatus") != "FLAGED") {
+						RevealSquare(NextSquare);
+						NextSquare.getAttribute("celltype") == "0"? BlankClicked(NextSquare) : "";
+					}
+                    				
+				}
+	}
+
+function GridClick(CurrentPosition, event) {
+	
+	if (!GameEnded) {
+
+//------------ INTERNAL FUNCTION ------------	
+	function BombClicked() {
+		RevealBombsOnly();
+		CurrentPosition.className = "BombRed";
+		Face.src = FaceSad.src;
+		Main.classList.add("Shake");
+	}
+
+	function BombClickedFirst(Square) { //---- Bomb Clicked on First Click - Move Bomb! ----
+		
+		console.log("Bomb clicked on first clicked, we can't have that... moving bomb");
+		Square.setAttribute("cellstatus", "COVERED");
+		Square.setAttribute("celltype", "BLANK");
+		
+		var Y = Square.getAttribute("Y");
+		var X = Square.getAttribute("X");
+
+		for (b=0; b<BombLocations.length; b++) {
+			if (BombLocations[b].x == X && BombLocations[b].y == Y) {
+
+				for (BombCount=0; BombCount<1; BombCount++) {
+					RandomY = Math.round((grid.rows.length-1)*Math.random());
+					RandomX = Math.round((grid.rows[0].cells.length-1)*Math.random());
+			
+					if (Y != RandomY && X != RandomX && grid.rows[RandomY].cells[RandomX].getAttribute("celltype") != "BOMB") {
+							grid.rows[RandomY].cells[RandomX].setAttribute("celltype", "BOMB");
+							grid.rows[RandomY].cells[RandomX].getAttribute("cellstatus", "COVERED");
+                    		BombLocations[b].x = RandomX;
+							BombLocations[b].y = RandomY;
+							}
+						else
+							BombCount--;
+					}
+				
+				}
+			}
+				//-------------------RE - DEFINE NEW BOMB SQUARES 
+				if (RandomY>0 && RandomY<(grid.rows.length-1)) {
+					for (p=RandomY-1; p<parseInt(RandomY)+2; p++) {
+						for (q=0; q<grid.rows[p].cells.length; q++) {
+							DefineSquare(q, p);
+							}
+						}
+				}
+				else if (RandomY==0) {
+					for (p=0; p<2; p++) {
+						for (q=0; q<grid.rows[p].cells.length; q++) {
+							DefineSquare(q, p);
+							}
+						}
+					}
+					else if (RandomY==(grid.rows.length-1)) {
+					for (p=RandomY-1; p<grid.rows.length; p++) {
+						for (q=0; q<grid.rows[p].cells.length; q++) {
+							DefineSquare(q, p);
+							}
+						}
+
+						}
+				//------------------END RE-DEFINE
+				
+			
+		
+		//-------------------RE - DEFINE NEW BLANK SQUARES 
+				if (Y>0 && Y<(grid.rows.length-1)) {
+					for (p=Y-1; p<parseInt(Y)+2; p++) {
+						for (q=0; q<grid.rows[p].cells.length; q++) {
+							DefineSquare(q, p);
+							}
+						}
+				}
+				else if (Y==0) {
+					for (p=0; p<2; p++) {
+						for (q=0; q<grid.rows[p].cells.length; q++) {
+							DefineSquare(q, p);
+							}
+						}
+					}
+					else if (Y==(grid.rows.length-1)) {
+					for (p=Y-1; p<grid.rows.length; p++) {
+						for (q=0; q<grid.rows[p].cells.length; q++) {
+							DefineSquare(q, p);
+							}
+						}
+
+						}
+		//------------------END RE-DEFINE
+		//DefineSquare(Square.X, Square.Y);
+		GridClick(Square,event);
+	}
+
+
+//------------ ---------------- ------------	
+
+	if (!RealTimer) Begin();
+	
+	if (ShiftDown == "Yes" || event.button == 2) {
+		if (CurrentPosition.getAttribute("cellstatus") == "EXPOSED") {
+				
+			}
+			else
+			{
+				if (CurrentPosition.getAttribute("cellstatus") == "FLAGED") {
+					CurrentPosition.className = "SquareNormal";
+					CurrentPosition.setAttribute("cellstatus", "COVERED");
+					BombsFlaged--;
+				}
+				else
+				{
+					CurrentPosition.className = "SquareFlag";
+					CurrentPosition.setAttribute("cellstatus", "FLAGED");
+					BombsFlaged++;
+				}
+				UpdateBombsScore();
+			}
+	}
+	else
+	{ if (CurrentPosition.getAttribute("cellstatus") != "FLAGED") {
+	switch (CurrentPosition.getAttribute("celltype")) {
+			case "BOMB" : if (FirstClickIsBomb) {
+							status = "wait...";
+							BombClickedFirst(CurrentPosition);
+							status = "";
+							}
+							else {
+						  		BombClicked();
+						  		EndGame();
+							}
+							
+						  break;
+			case "0"	: CurrentPosition.className = "SquareDown";
+						  CurrentPosition.setAttribute("cellstatus", "EXPOSED");
+						  TotalExposed++;
+						  BlankClicked(CurrentPosition);
+						  FirstClickIsBomb? FirstClickIsBomb = false : "";
+						  break;
+			default		: RevealSquare(CurrentPosition);
+						  FirstClickIsBomb? FirstClickIsBomb = false : "";
+						  break;
+		}
+
+	} }
+
+	((GridXTotal * GridYTotal - TotalExposed - BombsFlaged == 0) && (BombsFlaged==Bombs)) || (GridXTotal * GridYTotal - TotalExposed == Bombs)? GameFinished() : "";
+}
+
+}
+
+
+function About() {
+	var AboutHTMLStr = "";
+	AboutHTMLStr = "<table><tr><td>";
+	AboutHTMLStr += "<font face='verdana' size = 2 color = '#B5DB29'><b>About Minesweeper</b></font><hr width = '145' color = 'darkblue' align = 'left'><p>";
+	AboutHTMLStr += "<font face='verdana' size = 2 color = 'lightblue'>";
+	AboutHTMLStr += 'Welcome to the JavaScript and CSS3 version of Minesweeper, developed by <span class="menu_item" style="font-size:10pt" onclick="window.open(&#39;http://www.linkedin.com/in/henkkruger&#39;, &#39;_blank&#39;)">Henk Kruger</span><p>';
+	AboutHTMLStr += 'This game is based on the Windows Version of the game called <span class="menu_item" style="font-size:10pt" onclick="window.open(&#39;https://en.wikipedia.org/wiki/Microsoft_Minesweeper&#39;, &#39;_blank&#39;)">Minesweeper</span>, and is intended to be used for educational purposes. I originally developed this game in November 2000 as a means to teach myself JavaScript. At the time it only worked on Internet Explorer 5, but in 2018 I updated it to work on modern browsers too (Tested for Google Chrome. Internet Explorer has some issues, rather use Edge)';
+	AboutHTMLStr += "<p><font color = '#B5DB29'><i><center>Please read the Instructions first before you start playing</center></i></font><br><br>";
+	AboutHTMLStr += "<font face='verdana' size = 2 color = '#B5DB29'><b>Game Instructions</b></font><hr width = '135' color = 'darkblue' align = 'left'><p>";
+	AboutHTMLStr += "The objective of Minesweeper is to find all the mines as quickly as possible without uncovering any of them.<p>";
+	AboutHTMLStr += "<font face='verdana' size = 2 color = '#B5DB29'><b>To play Minesweeper</b></font>";
+	AboutHTMLStr += "<ol><li>From the Menu Options, select a level difficulty.</li>";
+	AboutHTMLStr += "<li>Click the Face to restart a level.</li>";
+	AboutHTMLStr += "<li>To start the timer, click any square on the playing field.</li></ol>";
+	
+	AboutHTMLStr += "<font face='verdana' size = 2 color = '#B5DB29'><b>Notes</b></font><p>";
+	AboutHTMLStr += "<ul><li>The game area consists of the playing field, a mine counter, and a timer.</li>";
+	AboutHTMLStr += "<li>You can uncover a square by clicking it. If you uncover a mine, you lose the game.</li>";
+	AboutHTMLStr += "<li>If a number appears on a square, it indicates how many mines are in the eight squares that surround the numbered one.</li>";
+	AboutHTMLStr += "<li>To mark a square you suspect contains a mine, right-click on the block OR hold down 'shift' and left-click it.</li>";
+	AboutHTMLStr += "<li>To un-mark a square you flagged, right-click on the square OR hold down 'shift' and left-click it.</li>";
+	AboutHTMLStr += "<li>You can click the Face to restart the game.</li>";
+	AboutHTMLStr += "<li>You can hold down 'shift' and click the Face to reveal the solution, but this will also end your game.</li></ul>";
+	AboutHTMLStr += "<font face='verdana' size = 2 color = '#B5DB29'><b>Strategies and tips</b></font><p>";
+	AboutHTMLStr += "<ul><li>When you have marked all mines around a numbered square, you can quickly uncover all empty squares around it by double-clicking that square with the left mouse button. If not all possible mines touching the square are marked, you will be notified as such in the statusbar.</li>";
+	AboutHTMLStr += "<li>Look for common patterns in numbers, which often indicate a corresponding pattern of mines. For example, the pattern 2-3-2 at the edge of a group of uncovered squares indicates a row of three mines next to the three numbers.</li></ul>";
+	AboutHTMLStr += "</font>";
+	AboutHTMLStr += "</td></tr></table>";
+	Main.innerHTML = AboutHTMLStr;
+}
+
+function DrawMineField() {
+
+	MineFieldHTML = "";
+	MineFieldHTML += '<table bgcolor="#cococo" border="5" cellpadding="0" cellspacing="0">';
+	MineFieldHTML += '<tr>';
+	MineFieldHTML += '	<td align="left" id="UserScore"></td>';
+	MineFieldHTML += '		<td align="center" valign="middle">';
+	MineFieldHTML += '        	<img id="Face" src="FaceSmile.gif" onClick = "ShiftDown == ' + "'Yes'" + '? RevealAll() : RestartLevel(CurrentLevel)">';
+	MineFieldHTML += '		</td>';
+	MineFieldHTML += '		<td id="timer" align="right">Right</td>';
+	MineFieldHTML += '</tr>';
+	MineFieldHTML += '<tr>';
+	MineFieldHTML += '		<td id="gameboard" colspan = "3">';
+			
+	MineFieldHTML += '		</td>';
+	MineFieldHTML += '</tr>';
+	MineFieldHTML += '<tr>';
+	MineFieldHTML += '		<td colspan="3" align="center" bgcolor = "#000000">';
+		
+	MineFieldHTML += '			<font face = "arial" size = "2" color = "red" id = "statusbar">Loading...</font>';
+			
+	MineFieldHTML += '		</td>';
+	MineFieldHTML += '</tr>';
+
+	MineFieldHTML += '</table>';
+	
+	MineFieldHTML += "<hr width = '100%' color = 'darkblue' align = 'left' style='margin-top: 45px'><p>";
+	MineFieldHTML += "<table style='width:100%;'><tr><td>";
+	MineFieldHTML += "<font face='verdana' size = 2 color = 'lightblue'><li>Click any Square to BEGIN</li><li>Right-Click to FLAG a Square</li><li>You can also hold down SHIFT and Click to FLAG a Square as well</li><li>Double-Click on a Numbered-Square to expose surrounding Squares (Surrounding FLAGGED Squares must match the Number)</li><li>Click Smiley Face to Restart</li><li>Hold Down SHIFT and Click Smiley Face To Reveal Plan (This also ends the Game)</li>";
+
+
+	Main.innerHTML = MineFieldHTML;
+
+}
+
+</script>
+
+</head>
+
+<body onLoad="preloadImages(); About()"  onKeyDown="CheckKeys()" onKeyUp="LeaveKeys()" bgcolor="#001122">
+
+<div style="width: 100%; display: block; margin-left: auto; margin-right: auto; border: 5px; text-align: center">
+
+<div class="header">M I N E S W E E P E R</div>
+<hr width = "290" color = "darkblue" />
+<div style="color: white; font-family:Tahoma; font-size:12pt; margin-top: 25px; margin-bottom: 25px;">JavaScript and CSS3 version by <span class="menu_item" onclick="window.open('http://www.linkedin.com/in/henkkruger', '_blank')" style="text-decoration:underline !important">Henk Kruger</span></div>
+<p>
+<span class="button" onClick="RestartLevel(1); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='Load Beginner Level'; return true" onMouseOut="status=''; return true"><span>Beginner</span></span><span class="button" onClick="RestartLevel(2); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='Load Intermediate Level'; return true" onMouseOut="status=''; return true"><span>Intermediate</span></span><span class="button" onclick="RestartLevel(3); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='Load Expert Level'; return true" onMouseOut="status=''; return true"><span>Expert</span></span><span class="button" onClick="document.querySelector( '.flip-container' ).classList.add( 'hover' ); return false" onMouseOver="status='Customise Mine Field'; return true" onMouseOut="status=''; return true"><span>Custom</span></span><span class="button" onClick="if(!GameEnded) EndGame(); About(); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='About this version of Minesweeper'; return true" onMouseOut="status=''"; return true><span>About</span></span>
+<p>
+
+<div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+	<div class="flipper">
+		<div class="front">
+
+			<div valign = "top" align = "center" id = "Main" style="width:900px"></div>
+
+		</div>
+		<div class="back">
+			<div valign = "top" align = "center" id = "Custom" style="width:900px">
+
+				 <table border=5><tr><td colspan = 3>
+				 <font face='verdana' size = 2 color = '#B5DB29'><b>Customise Mine Field</b></font><hr width = '156' color = 'darkblue'></td></tr><tr>
+				 <td><font face = 'verdana' size = 2 color = 'lightblue'>Width:</font></td><td><input id='CustomWidth' value='8' size = 5 onBlur = 'if (this.value<8) this.value = 8; if (this.value>30) this.value = 30'></td>
+				 <td><img src = "FaceCool.gif" onClick = "RestartLevel(4); ValidateCustomFields(); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); this.focus(); return true"></td></tr>
+				 <tr><td><font face = 'verdana' size = 2 color = 'lightblue'>Height:</font></td><td><input id='CustomHeight' value='8' size = 5 onBlur = 'if (this.value<8) this.value = 8; if (this.value>24) this.value = 24'></td></tr>
+				 <tr><td><font face = 'verdana' size = 2 color = 'lightblue'>Bombs:</font></td><td><input id='CustomBombs' value='10' size = 5 onBlur = 'if (this.value>((document.querySelector(&#39;#CustomWidth&#39;).value-1) * (document.querySelector(&#39;#CustomHeight&#39;).value-1))) this.value = ((document.querySelector(&#39;#CustomWidth&#39;).value-1)*(document.querySelector(&#39;#CustomHeight&#39;).value-1)); if (this.value<10) this.value = 10'></td></tr>
+				 </table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+</div>
+
+<script type="text/javascript">Main = document.querySelector("#Main");</script>
+
+</body>
+
+</html>
