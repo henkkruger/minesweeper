@@ -1404,7 +1404,7 @@ function DrawMineField() {
 <span class="button" onClick="RestartLevel(1); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='Load Beginner Level'; return true" onMouseOut="status=''; return true"><span>Beginner</span></span><span class="button" onClick="RestartLevel(2); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='Load Intermediate Level'; return true" onMouseOut="status=''; return true"><span>Intermediate</span></span><span class="button" onclick="RestartLevel(3); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='Load Expert Level'; return true" onMouseOut="status=''; return true"><span>Expert</span></span><span class="button" onClick="document.querySelector( '.flip-container' ).classList.add( 'hover' ); return false" onMouseOver="status='Customise Mine Field'; return true" onMouseOut="status=''; return true"><span>Custom</span></span><span class="button" onClick="if(!GameEnded) EndGame(); About(); document.querySelector( '.flip-container' ).classList.remove( 'hover' ); return false" onMouseOver="status='About this version of Minesweeper'; return true" onMouseOut="status=''"; return true><span>About</span></span>
 <p>
 
-<div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+<div class="flip-container">
 	<div class="flipper">
 		<div class="front">
 
