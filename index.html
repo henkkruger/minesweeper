@@ -1364,7 +1364,7 @@ function DrawMineField() {
 	
 	MineFieldHTML += "<hr width = '100%' color = 'darkblue' align = 'left' style='margin-top: 45px'><p>";
 	MineFieldHTML += "<table style='width:100%;'><tr><td>";
-	MineFieldHTML += "<font face='verdana' size = 2 color = 'lightblue'><li>Click any Square to BEGIN</li><li>Right-Click to FLAG a Square</li><li>You can also hold down SHIFT and Click to FLAG a Square as well</li><li>Double-Click on a Numbered-Square to expose surrounding Squares (Surrounding FLAGGED Squares must match the Number)</li><li>Click Smiley Face to Restart</li><li>Hold Down SHIFT and Click Smiley Face To Reveal Plan (This also ends the Game)</li>";
+	MineFieldHTML += "<font face='verdana' size = 2 color = 'lightblue'><li>Click any Square to BEGIN</li><li>Right-Click to FLAG a Square</li><li>You can also hold down SHIFT and Click to FLAG a Square</li><li>Double-Click on a Numbered-Square to expose surrounding Squares (Surrounding FLAGGED Squares must match the Number)</li><li>Click Smiley Face to Restart</li><li>Hold Down SHIFT and Click Smiley Face To Reveal Plan (This also ends the Game)</li>";
 
 
 	Main.innerHTML = MineFieldHTML;
@@ -1375,7 +1375,7 @@ function DrawMineField() {
 
 </head>
 
-<body onLoad="preloadImages(); About()"  onKeyDown="CheckKeys()" onKeyUp="LeaveKeys()" bgcolor="#001122">
+<body onLoad="preloadImages(); RestartLevel(1)"  onKeyDown="CheckKeys()" onKeyUp="LeaveKeys()" bgcolor="#001122">
 
 <div style="width: 100%; display: block; margin-left: auto; margin-right: auto; border: 5px; text-align: center">
 
